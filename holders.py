@@ -7,11 +7,14 @@ def main():
     allVaults = requests.get("https://vaults.finance/all")
     jsonAllVaults = json.loads(json.dumps(allVaults.json()))
     print(f'total amount of vaults {len(jsonAllVaults)}')
- 
+    wantTokensFile = open('wantTokens.json', 'w')
+    wantTokens = {}
     
-    for i in jsonAllVaults:   
+    for i in jsonAllVaults:  
+        wantTokens[i['token']['symbol']]=i["token"]["address"]
         getHodlers(i["token"]["address"])
-        
+
+    json.dump(wantTokens,wantTokensFile)   
 
 def getHodlers(address):
     params = {
