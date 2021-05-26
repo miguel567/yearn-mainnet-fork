@@ -1,4 +1,9 @@
 from brownie import *
+import os
+def setWhale():
+    files = os.listdir("./wantTokens")
+    print(f'Found {len(files)} wantTokens json files')
+
 
 
 def main():
@@ -20,3 +25,5 @@ def main():
         crvToken.transfer(account, "1000 ether", {'from': crvWhale})
         yfiToken.transfer(account, "250 ether", {'from': yfiWhale})
         daiToken.transfer(account, "1000000 ether", {'from': daiWhale})
+
+setWhale()
