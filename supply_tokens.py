@@ -4,8 +4,9 @@ def setWhale():
     files = os.listdir("./wantTokens")
     print(f'Found {len(files)} wantTokens json files')
     for whale in files:
+            
             tokenContract  = Contract.from_explorer(whale[:-5])
-            print(tokenContract)
+            
             """ transferFunds(json.loads(open('./wantTokens/'+whale,'r').read())[0]['address']) # this will transfer funds form wahles to the 3 accounts. """
 
 
@@ -31,4 +32,4 @@ def main():
         daiToken.transfer(account, "1000000 ether", {'from': daiWhale})
 
 
-main()
+setWhale()
