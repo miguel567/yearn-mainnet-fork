@@ -1,17 +1,28 @@
 from brownie import *
 import os,json
-def setWhale():
+def main():
     files = os.listdir("./wantTokens")
     print(f'Found {len(files)} wantTokens json files')
-    for whale in files:
+    for wants in files:
+            tokenContract  = Contract.from_explorer(wants[:-5])
             
-            tokenContract  = Contract.from_explorer(whale[:-5])
-            
-            """ transferFunds(json.loads(open('./wantTokens/'+whale,'r').read())[0]['address']) # this will transfer funds form wahles to the 3 accounts. """
+            transferFunds(json.loads(open('./wantTokens/'+wants,'r').read())[0]['address'], tokenContract) # this will transfer funds form wahles to the 3 accounts.
 
 
+def transferFunds(whale, tokenContract):
+    testAccounts = [
+        "0x9fde0c31B3b21E8031C08A5c43f851c9C6544E35",
+        "0x5fe0676e41741A3a2d84C41DC46cC991812FE110",
+        "0x5307DB0c8Fb2Dc616B94f3b2f9fe7a99920e5e52"
+    ]
+    _whale = accounts.at(whale, force=True)
+    print(f'Whale {_whale} token balance: {tokenContract.balanceOf(_whale)/1**(tokenContract.decimals())}')
+    for account in testAccounts:
+        tokenContract.transfer(account, "1 gwei", {'from': _whale})
+        print(f'Test Account {account} token balance: {tokenContract.balanceOf(account)/1**(tokenContract.decimals())}')
 
-def main():
+
+""" def main():
     testAccounts = [
         "0x9fde0c31B3b21E8031C08A5c43f851c9C6544E35",
         "0x5fe0676e41741A3a2d84C41DC46cC991812FE110",
@@ -29,7 +40,7 @@ def main():
     for account in testAccounts:
         crvToken.transfer(account, "1000 ether", {'from': crvWhale})
         yfiToken.transfer(account, "250 ether", {'from': yfiWhale})
-        daiToken.transfer(account, "1000000 ether", {'from': daiWhale})
+        daiToken.transfer(account, "1000000 ether", {'from': daiWhale}) """
 
 
-setWhale()
+main()
